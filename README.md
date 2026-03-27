@@ -1,6 +1,6 @@
 # Weak Mixing Lean 4
 
-## Howto use
+## Howto
 
 1. Install Lean
 https://lean-lang.org/
