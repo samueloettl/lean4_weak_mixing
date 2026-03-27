@@ -1,13 +1,16 @@
-# lean4_weak_mixing
+# Weak Mixing Lean 4
 
-## GitHub configuration
+## Howto use
 
-To set up your new GitHub repository, follow these steps:
-
-* Under your repository name, click **Settings**.
-* In the **Actions** section of the sidebar, click "General".
-* Check the box **Allow GitHub Actions to create and approve pull requests**.
-* Click the **Pages** section of the settings sidebar.
-* In the **Source** dropdown menu, select "GitHub Actions".
-
-After following the steps above, you can remove this section from the README file.
+1. Install Lean
+https://lean-lang.org/
+2. Clone the repository
+```
+git clone git@github.com:samueloettl/lean4_weak_mixing.git
+```
+3. Get build cache
+```
+lake update
+lake exe cache get
+```
+4. Open in VSCode/VSCodium
