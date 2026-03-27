@@ -5,7 +5,14 @@ Authors: Samuel Oettl
 -/
 module
 
-public import Mathlib
+public import Mathlib.Topology.MetricSpace.Pseudo.Basic
+
+/-!
+# PseudoMetricTendstoUiformly
+
+In this file we prove some lemmas needed for OnAverageIndependent.lean. We apply these to get
+uniform convergence of the Birkhoff averages such that we can exchange limits.
+-/
 
 public section
 

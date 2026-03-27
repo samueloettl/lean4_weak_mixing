@@ -5,16 +5,16 @@ Authors: Samuel Oettl
 -/
 module
 
-public import Mathlib
+public import Mathlib.MeasureTheory.Function.AEEqFun
 
 /-!
-# Characterization of ergodicity
+# AEEqFun comp
 
-In this file we prove that ergodicity wrt a probability measure is eqivalent to convergence of the
-Birkhoff Averages of `μ (A ∩ (preimage f^[n] B))` to `μ A * μ B` for all measurable Sets A and B.
-We also prove that the convergence for all measurable sets is equivalent to the convergence on a
-π-system that generates the `σ`-algebra. (In particular for product measures of σ-finite spaces it
-is enough to know the convergence on measurable rectangles.)
+In this file we prove that `compQuasiMeasurePreserving` plays well with composition. In particular
+we prove that iterating `compQuasiMeasurePreserving` is the same as applying it to the iterated
+composition. This is needed to prove similar results for the Koopman operator
+`Lp.comMeasurePreserving`. We also state and prove the corresponding auxiliary for
+`compMeasurePreserving`.
 -/
 
 public section

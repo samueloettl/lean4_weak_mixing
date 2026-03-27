@@ -5,21 +5,13 @@ Authors: Samuel Oettl
 -/
 module
 
-public import Mathlib
-
---public import Mathlib.Algebra.Order.Ring.Star
---public import Mathlib.Analysis.CStarAlgebra.Classes
---public import Mathlib.Dynamics.Ergodic.Function
---public import Mathlib.Order.BourbakiWitt
+public import Mathlib.Dynamics.BirkhoffSum.Average
+public import Mathlib.MeasureTheory.Measure.MeasureSpaceDef
 
 /-!
-# Characterization of ergodicity
+# BirkhoffAverageConst
 
-In this file we prove that ergodicity wrt a probability measure is eqivalent to convergence of the
-Birkhoff Averages of `μ (A ∩ (preimage f^[n] B))` to `μ A * μ B` for all measurable Sets A and B.
-We also prove that the convergence for all measurable sets is equivalent to the convergence on a
-π-system that generates the `σ`-algebra. (In particular for product measures of σ-finite spaces it
-is enough to know the convergence on measurable rectangles.)
+In this file we prove that the Birkhoff average over a constant is constant (if (n : R) ≠ 0).
 -/
 
 public section
@@ -67,9 +59,9 @@ theorem birkhoffAverage_le_birkhoffAverage (R : Type*) {α : Type*} {M : Type*} 
   fun n x ↦ smul_le_smul_of_nonneg_left
     (birkhoffSum_le_birkhoffSum h n x) <|inv_nonneg_of_nonneg <|Nat.cast_nonneg' n
 
-theorem abs_comp_birkhoffAverage_le_birkhoffAverage_comp_abs (R : Type*) {α : Type*} {M : Type*} [DivisionSemiring R]
-    [AddCommGroup M] [Lattice M] [PartialOrder R] [IsOrderedRing R] [Module R M] [PosSMulMono R M]
-    [PosMulReflectLT R] [AddLeftMono M] (f : α → α) {g : α → M} :
+theorem abs_comp_birkhoffAverage_le_birkhoffAverage_comp_abs (R : Type*) {α : Type*} {M : Type*}
+    [DivisionSemiring R] [AddCommGroup M] [Lattice M] [PartialOrder R] [IsOrderedRing R]
+    [Module R M] [PosSMulMono R M] [PosMulReflectLT R] [AddLeftMono M] (f : α → α) {g : α → M} :
     abs ∘ (birkhoffAverage R f g) ≤ birkhoffAverage R f (abs ∘ g) := by
   apply abs_le'.mpr
   rw [← birkhoffAverage_neg]

@@ -5,7 +5,17 @@ Authors: Samuel Oettl
 -/
 module
 
-public import Mathlib
+public import Mathlib.Analysis.CStarAlgebra.Classes
+public import Mathlib.MeasureTheory.Integral.Prod
+
+/-!
+# MemLpProd
+
+In this file we prove lemmas about the certain products of Lp functions again belonging to Lp wrt.
+the product measure (see `memLp_prod`). We also prove that if A×ˢA is eventually constant along
+an ae Filter wrt. the product measure, A is eventually constant (see
+`eventuallyConst_A_sq_imp_eventuallyConst_A`).
+-/
 
 public section
 
@@ -153,7 +163,6 @@ lemma ae_const_of_mul_conj_ae_const [SFinite μ] {f : X → ℂ} {a : ℂ}
     simp
   use conj a / conj f x
   simpa [this] using h.1
-
 
 lemma eventuallyConst_prod_imp_eventuallyConst {A : Set X} {Y : Type*} [MeasurableSpace Y]
     {ν : Measure Y} [SFinite ν] {B : Set Y} (h : EventuallyConst (A ×ˢ B) (ae (μ.prod ν))) :

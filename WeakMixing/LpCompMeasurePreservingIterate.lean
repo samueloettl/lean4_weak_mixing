@@ -5,22 +5,16 @@ Authors: Samuel Oettl
 -/
 module
 
-public import Mathlib
+public import Mathlib.MeasureTheory.Function.LpSpace.Basic
 public import WeakMixing.AEEqFunCompMeasurePreservingIterate
 
---public import Mathlib.Algebra.Order.Ring.Star
---public import Mathlib.Analysis.CStarAlgebra.Classes
---public import Mathlib.Dynamics.Ergodic.Function
---public import Mathlib.Order.BourbakiWitt
-
 /-!
-# Characterization of ergodicity
+# Lp.compMeasurePreserving_iterate
 
-In this file we prove that ergodicity wrt a probability measure is eqivalent to convergence of the
-Birkhoff Averages of `μ (A ∩ (preimage f^[n] B))` to `μ A * μ B` for all measurable Sets A and B.
-We also prove that the convergence for all measurable sets is equivalent to the convergence on a
-π-system that generates the `σ`-algebra. (In particular for product measures of σ-finite spaces it
-is enough to know the convergence on measurable rectangles.)
+In this file we prove that `Lp.compMeasurePreserving` plays well with composition. In particular
+we prove that iterating `Lp.compMeasurePreserving` is the same as applying it to the iterated
+composition. This is needed for the specialisation of the Von Neumann Mean Ergodic Theorem we want
+to prove.
 -/
 
 public section

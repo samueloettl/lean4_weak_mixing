@@ -1,6 +1,21 @@
-import Mathlib
-import WeakMixing.OnAverageIndependent
+/-
+Copyright (c) 2026 Samuel Oettl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Samuel Oettl
+-/
+
+import Mathlib.Algebra.Order.Ring.Star
+import Mathlib.Data.Real.StarOrdered
 import WeakMixing.MemLpProd
+import WeakMixing.OnAverageIndependent
+
+/-!
+# Weak-mixing Main File
+
+In this file we state different definitions of weak-mixing and prove that the implication chain
+DoublyWeakMixing implies TraditionalWeakMixing implies WeakMixing implies DoublyErgodic implies
+SpectralWeakMixingL2Complex and also the equivalence WeakMixing iff WeakMixing'.
+-/
 
 open Filter Topology Function MeasureTheory ComplexConjugate
 
@@ -11,11 +26,11 @@ universe u
 
 def WeakMixing {X : Type u} [MeasurableSpace X] (T : X → X) (μ : Measure X) : Prop :=
   ∀ {Y : Type u} [MeasurableSpace Y], ∀ {ν : Measure Y} [IsFiniteMeasure ν],
-  ∀ {S : Y → Y}, Ergodic S ν → Ergodic (Prod.map T S) (Measure.prod μ ν)
+  ∀ {S : Y → Y}, Ergodic S ν → Ergodic (Prod.map T S) (μ.prod ν)
 
 def WeakMixing' {X : Type u} [MeasurableSpace X] (T : X → X) (μ : Measure X) : Prop :=
   ∀ {Y : Type u} [MeasurableSpace Y], ∀ {ν : Measure Y} [IsProbabilityMeasure ν],
-  ∀ {S : Y → Y}, Ergodic S ν → Ergodic (Prod.map T S) (Measure.prod μ ν)
+  ∀ {S : Y → Y}, Ergodic S ν → Ergodic (Prod.map T S) (μ.prod ν)
 
 def TraditionalWeakMixing (T : X → X) (μ : Measure X) : Prop :=
   ∀ {A}, MeasurableSet A → ∀ {B}, MeasurableSet B →
@@ -23,7 +38,7 @@ def TraditionalWeakMixing (T : X → X) (μ : Measure X) : Prop :=
   atTop (𝓝 0)
 
 def DoublyErgodic (T : X → X) (μ : Measure X) : Prop :=
-  Ergodic (Prod.map T T) (Measure.prod μ μ)
+  Ergodic (Prod.map T T) (μ.prod μ)
 
 def DoublyWeakMixing (T : X → X) (μ : Measure X) : Prop :=
   TraditionalWeakMixing R (Prod.map T T) (μ.prod μ)
@@ -32,18 +47,18 @@ def SpectralWeakMixingL2Complex (h : MeasurePreserving T μ μ) : Prop :=
   ∀ {c:ℂ}, ∀{f : Lp ℂ 2 μ}, (Lp.compMeasurePreserving T h) f = c • f
   → ∃ (a : ℂ), f =ᶠ[ae μ] const X a
 
-theorem traditionalWeakMixing_congr_ring (S : Type*) [DivisionSemiring S] [Module S ℝ] (T : X → X)
-    (μ : Measure X) : TraditionalWeakMixing R T μ = TraditionalWeakMixing S T μ := by
-  simp only [TraditionalWeakMixing, birkhoffAverage_congr_ring R S]
-
-theorem traditionalWeakMixing_congr_ring' (S : Type*) [DivisionSemiring S] [Module S ℝ] :
+theorem traditionalWeakMixing_congr_ring (S : Type*) [DivisionSemiring S] [Module S ℝ] :
     TraditionalWeakMixing (X := X) R = TraditionalWeakMixing S := by
   unfold TraditionalWeakMixing
   simp only [birkhoffAverage_congr_ring' R S]
 
+theorem traditionalWeakMixing_congr_ring_apply (S : Type*) [DivisionSemiring S] [Module S ℝ]
+    (T : X → X) (μ : Measure X) : TraditionalWeakMixing R T μ = TraditionalWeakMixing S T μ := by
+  rw [traditionalWeakMixing_congr_ring R S]
+
 theorem ergodic_of_traditionalWeakMixing [IsProbabilityMeasure μ] (hM : Measurable T) {R : Type*}
     [DivisionSemiring R] [Module R ℝ] (h : TraditionalWeakMixing R T μ) : Ergodic T μ := by
-  rw [traditionalWeakMixing_congr_ring' R ℝ] at h
+  rw [traditionalWeakMixing_congr_ring R ℝ] at h
   refine Ergodic.of_onAverageIndependent hM (fun A hA B hB ↦ ?_)
   specialize h hA hB
   apply Filter.tendsto_sub_const_iff (μ.real A * μ.real B)|>.mp
@@ -166,9 +181,8 @@ theorem spectralWeakMixingL2Complex_of_doublyErgodic (h : DoublyErgodic T μ) [S
     · exact memLp_prod 2 (Lp.memLp f) (memLp_conj' f)|>.aestronglyMeasurable
     · change (μ.prod μ) {x | (g ∘ Prod.map T T) x = g x}ᶜ = 0
       have hf' := hf
-      apply Lp.ext_iff.mp at hf
-      have hf := ae_eq_trans (ae_eq_trans (ae_eq_symm (Lp.coeFn_compMeasurePreserving f
-        (measurePreserving_of_doublyErgodic h))) hf) (Lp.coeFn_smul c f)
+      grw [Lp.ext_iff, Lp.coeFn_compMeasurePreserving f (measurePreserving_of_doublyErgodic h),
+        Lp.coeFn_smul c f] at hf
       change μ {x | (f ∘ T) x = c • f x}ᶜ = 0 at hf
       simp only [comp_apply, smul_eq_mul] at hf
       unfold g
@@ -236,7 +250,7 @@ theorem weakMixing_of_traditionalWeakMixing [IsProbabilityMeasure μ] (hm : Meas
       simp only [Set.preimage_iterate_eq]
       exact hS.onAverageIndependent A₂ hA₂ B₂ hB₂
     · rw [tendsto_zero_iff_abs_tendsto_zero]
-      rw [traditionalWeakMixing_congr_ring' R ℝ] at h
+      rw [traditionalWeakMixing_congr_ring R ℝ] at h
       apply squeeze_zero (g := fun x:ℕ ↦
         (x:ℝ)⁻¹ • ∑ x ∈ Finset.range x, |μ.real (A₁ ∩ T^[x] ⁻¹' B₁) - μ.real A₁ * μ.real B₁|)
       · exact fun _ ↦ abs_nonneg _
@@ -257,5 +271,3 @@ theorem weakMixing_of_traditionalWeakMixing [IsProbabilityMeasure μ] (hm : Meas
         exact h hA₁ hB₁
   · exact hA
   · exact hB
-
---#min_imports

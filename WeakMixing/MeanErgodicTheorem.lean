@@ -1,20 +1,19 @@
 /-
-Copyright (c) 2023 Yury Kudryashov. All rights reserved.
+Copyright (c) 2026 Samuel Oettl. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Yury Kudryashov
+Authors: Samuel Oettl
 -/
 module
 
-public import Mathlib
+public import Mathlib.Analysis.InnerProductSpace.MeanErgodic
+public import Mathlib.Dynamics.Ergodic.Function
+public import Mathlib.MeasureTheory.Function.L2Space
 
 /-!
-# Functions invariant under (quasi)ergodic map
+# Von Neumann Mean Ergodic Theorem
 
-In this file we prove that an a.e. strongly measurable function `g : α → X`
-that is a.e. invariant under a (quasi)ergodic map is a.e. equal to a constant.
-We prove several versions of this statement with slightly different measurability assumptions.
-We also formulate a version for `MeasureTheory.AEEqFun` functions
-with all a.e. equalities replaced with equalities in the quotient space.
+In this file we specialize `ContinuousLinearMap.tendsto_birkhoffAverage_orthogonalProjection` to
+the Koopman operator of an ergodic map.
 -/
 
 public section

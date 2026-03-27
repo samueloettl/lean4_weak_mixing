@@ -5,16 +5,10 @@ Authors: Samuel Oettl
 -/
 module
 
-public import Mathlib
-public import WeakMixing.PseudoMetricTendstoUniformly
 public import WeakMixing.BirkhoffAverageConst
-public import WeakMixing.MeanErgodicTheorem
 public import WeakMixing.LpCompMeasurePreservingIterate
-
---public import Mathlib.Algebra.Order.Ring.Star
---public import Mathlib.Analysis.CStarAlgebra.Classes
---public import Mathlib.Dynamics.Ergodic.Function
---public import Mathlib.Order.BourbakiWitt
+public import WeakMixing.MeanErgodicTheorem
+public import WeakMixing.PseudoMetricTendstoUniformly
 
 /-!
 # Characterization of ergodicity
@@ -22,8 +16,9 @@ public import WeakMixing.LpCompMeasurePreservingIterate
 In this file we prove that ergodicity wrt a probability measure is eqivalent to convergence of the
 Birkhoff Averages of `μ (A ∩ (preimage f^[n] B))` to `μ A * μ B` for all measurable Sets A and B.
 We also prove that the convergence for all measurable sets is equivalent to the convergence on a
-π-system that generates the `σ`-algebra. (In particular for product measures of σ-finite spaces it
-is enough to know the convergence on measurable rectangles.)
+π-system that generates the `σ`-algebra `onAverageIndependent_measurableSet_of_piSystem`. (In
+particular for product measures of σ-finite spaces it is enough to know the convergence on
+measurable rectangles.)
 -/
 
 public section
